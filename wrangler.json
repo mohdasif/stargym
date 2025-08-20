@@ -1,5 +1,5 @@
 {
-  "name": "stargym-worker",
+  "name": "gym",
   "main": "index.js",
   "compatibility_date": "2025-08-20"
 }
