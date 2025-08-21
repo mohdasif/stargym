@@ -923,32 +923,43 @@ figure.tmblr-embed + p {
 
     <!-- Desktop Navigation -->
     <div id="desktop-navigation">
-        <a href="/">Home</a>
-        <a href="/blog">Blog</a>
-        <a href="/books">Books</a>
-        <a href="/about">About</a>
-     
+        <a href="/" class="home-link only-home">Home</a>
+        <a href="https://www.amazon.in/shop/mohdasif/list/330AGHCE4U9NB?ref_=aip_sf_list_spv_ons_mixed_d">Nutrition</a>
+        <a href="https://www.amazon.in/shop/mohdasif/list/1DSMCDWBG5649?ref_=aip_sf_list_spv_ofs_mixed_d">Supplements</a>
+        <a href="https://www.amazon.in/shop/mohdasif/list/ZULLJSSHYLJO?ref_=aip_sf_list_spv_ofs_mixed_d">Accessories</a>     
+        
+
         <a href="/photos" style="position: absolute; right: 200px;"><i class="fa-solid fa-camera"></i></a>
         <a href="/videos" style="position: absolute; right: 165px;"><i class="fa-solid fa-clapperboard"></i></a>
-        <a href="/podcasts" style="position: absolute; right: 147px;"><i class="fa-solid fa-headphones"></i></a> 
+        <a href="/motivation" style="position: absolute; right: 147px;"><i class="fa-solid fa-headphones"></i></a> 
     </div>
 
-    <!-- Mobile Navigation -->  
-    <div id="mobile-navigation">  
-        <a href="/"><i class="fa-solid fa-house" style="font-size: 18px; color: #000;"></i></a>
-        <a href="https://mohdasif.in"><i class="fa-solid fa-feather" style="font-size: 18px; color: #007E8F;"></i></a>
-        <a href="/photos"><i class="fa-solid fa-camera" style="font-size: 18px; color: #1ABC9C;"></i></a>
-        <a href="/videos"><i class="fa-solid fa-play" style="font-size: 18px; color: #74c0f5;"></i></a>
-        <a href="/contact"><i class="fa-regular fa-comment-dots" style="font-size: 18px;"></i></a>
+<!-- Mobile Navigation -->  
+<div id="mobile-navigation">  
+    <!-- Home button (should redirect on homepage) -->
+    <a href="/" class="home-link only-home">
+        <i class="fa-solid fa-house house-thin-style" style="font-size: 18px;"></i>
+    </a>
+        <a href="/photos"><i class="fa-solid fa-camera camera-thin-style" style="font-size: 18px;"></i></a>
+        <a href="/videos"><i class="fa-solid fa-play play-thin-style" style="font-size: 18px;"></i></a>
+        <a href="https://www.amazon.in/shop/mohdasif"><i class="fa-brands fa-amazon amazon-thin" style="font-size: 18px;"></i></a>
+        <a href="/contact"><i class="fa-solid fa-comment-dots comment-thin-style" style="font-size: 18px;"></i></a>
     </div>
+<style>
+.amazon-thin {
+  font-weight: 100;   /* lighter stroke (if browser supports) */
+  opacity: 0.6;       /* makes it look thinner */
+}
+</style>
 
-<div class="menu-toggle"><i class="fa-solid fa-bars"></i></div>
+
+<div class="menu-toggle"><i class="fa-solid fa-bars bars-light-style"></i></div>
 <nav>
     <ul>
     <li><h4 style="margin-bottom: 50px;"></h4></li>
-    <li><a href="/books">Books</a></li>
-    <li><a href="/fitness">Fitness</a></li>
-    <li><a href="/blog">Blog</a></li>
+    <li><a href="https://www.amazon.in/shop/mohdasif/list/330AGHCE4U9NB?ref_=aip_sf_list_spv_ons_mixed_d">Nutrition</a></li>
+    <li><a href="https://www.amazon.in/shop/mohdasif/list/1DSMCDWBG5649?ref_=aip_sf_list_spv_ofs_mixed_d">Supplements</a></li>
+    <li><a href="https://www.amazon.in/shop/mohdasif/list/ZULLJSSHYLJO?ref_=aip_sf_list_spv_ofs_mixed_d">Accessories</a></li>
     </ul>
 </nav>
 
@@ -1043,27 +1054,16 @@ document.addEventListener('DOMContentLoaded', function () {
 <!-- Content Container for Bookshelves Section -->
 <div class="content-container" style="background-color: #FFFFFF;">
   <ul style="list-style-type: none; padding: 0;">
-      <li style="margin-bottom: 10px; text-align: center;">
-          <a href="https://telegram.me/mohdasif" class="blank-button" style="display: inline-block; padding: 6px 13px; border: 1px solid #999; border-radius: 15px; cursor: pointer; max-width: 180px; margin: auto; text-decoration: none; color: grey;">
-              Telegram
-          </a>
-      </li>
-      <li style="margin-bottom: 10px; text-align: center;">
-          <a href="https://clubhouse.com/@mohdasif" class="blank-button" style="display: inline-block; padding: 6px 10px; border: 1px solid #999; border-radius: 15px; cursor: pointer; max-width: 180px; margin: auto; text-decoration: none; color: grey;">
-              Clubhouse
-          </a>
-      </li>
-      <li style="margin-bottom: 10px; text-align: center;">
-          <a href="https://linkedin.com/in/mohdasif" class="blank-button" style="display: inline-block; padding: 6px 16px; border: 1px solid #999; border-radius: 15px; cursor: pointer; max-width: 180px; margin: auto; text-decoration: none; color: grey;">
-              Linkedin
-          </a>
-      </li>
+    <li style="margin-bottom: 10px; text-align: center;">
+      <a href="https://www.instagram.com/stargym.in" class="blank-button" style="display: inline-block; padding: 6px 12px; border: 1px solid #999; border-radius: 15px; cursor: pointer; max-width: 180px; margin: auto; text-decoration: none; color: grey;">
+        Instagram
+      </a>
+    </li>    
+    <li style="margin-bottom: 10px; text-align: center;">
+      <a href="https://www.youtube.com/@stargym-in" class="blank-button" style="display: inline-block; padding: 6px 15px; border: 1px solid #999; border-radius: 15px; cursor: pointer; max-width: 180px; margin: auto; text-decoration: none; color: grey;">
+        YouTube
+      </a>
     </li>
-      <li style="text-align: center;">
-          <a href="https://x.com/mohdasif" class="blank-button" style="display: inline-block; padding: 5px 13px; border: 1px solid #999; border-radius: 15px; cursor: pointer; max-width: 150px; margin: auto; text-decoration: none; color: grey;">
-              X
-          </a>
-      </li>
     </li>       
   </ul>
 </div>
@@ -1081,9 +1081,9 @@ document.addEventListener('DOMContentLoaded', function () {
     <div class="links-container" style="text-align: left;">
         <h2 style="text-align: left;">Contact</h2>
         <p class="profile-text">
-            Feel free to reach out for inquiries or collaborations.
+            Have questions or want to join? We’re here to help!
         </p>
-        <p>Email: <a href="mailto:mail@mohdasif.com">mail@mohdasif.com</a></p>
+        <p>Email: <a href="mailto:support@stargym.in">support@stargym.in</a></p>
     </div>
 </div>
 
