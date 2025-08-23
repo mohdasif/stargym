@@ -738,7 +738,7 @@ nav ul li {
     }
 /* Thin-style for all icons: black by default, grey on hover */
 .house-thin-style,
-.feather-thin-style,
+.location-thin-style,
 .camera-thin-style,
 .play-thin-style,
 .comment-thin-style {
@@ -750,11 +750,11 @@ nav ul li {
 }
 
 .house-thin-style:hover,
-.feather-thin-style:hover,
+.location-thin-style:hover,   /* added :hover */
 .camera-thin-style:hover,
 .play-thin-style:hover,
 .comment-thin-style:hover {
-  -webkit-text-stroke: 0.8px #6C757D; /* soft grey on hover */
+  -webkit-text-stroke: 0.8px #6C757D;
   opacity: 0.85;
 }
 
@@ -790,17 +790,25 @@ nav ul li {
         <a href="/motivation" style="position: absolute; right: 147px;"><i class="fa-solid fa-headphones"></i></a> 
     </div>
 
-<!-- Mobile Navigation -->  
+<!-- Mobile Navigation -->
 <div id="mobile-navigation">  
     <!-- Home button (should redirect on homepage) -->
     <a href="/" class="home-link only-home">
         <i class="fa-solid fa-house house-thin-style" style="font-size: 18px;"></i>
     </a>
-        <a href="/photos"><i class="fa-solid fa-camera camera-thin-style" style="font-size: 18px;"></i></a>
-        <a href="/videos"><i class="fa-solid fa-play play-thin-style" style="font-size: 18px;"></i></a>
-        <a href="https://www.amazon.in/shop/mohdasif"><i class="fa-brands fa-amazon amazon-thin" style="font-size: 18px;"></i></a>
-        <a href="/contact"><i class="fa-solid fa-comment-dots comment-thin-style" style="font-size: 18px;"></i></a>
-    </div>
+    <a href="/location">
+        <i class="fa-solid fa-location-dot location-thin-style" style="font-size: 18px;"></i>
+    </a>
+    <a href="/photos">
+        <i class="fa-solid fa-camera camera-thin-style" style="font-size: 18px;"></i>
+    </a>
+    <a href="/videos">
+        <i class="fa-solid fa-play play-thin-style" style="font-size: 18px;"></i>
+    </a>
+    <a href="/contact">
+        <i class="fa-solid fa-comment-dots comment-thin-style" style="font-size: 18px;"></i>
+    </a>
+</div>
 <style>
 .amazon-thin {
   font-weight: 100;   /* lighter stroke (if browser supports) */

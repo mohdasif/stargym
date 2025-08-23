@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Launching Soon — Map</title>
+  <style>
+    /* Page reset */
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,'Helvetica Neue',Arial}
+    #map{height:100%;width:100%;position:fixed;inset:0;}
+
+    /* Overlay that announces "Launching Soon" */
+    .overlay{
+      position:fixed;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;
+    }
+
+    .card{
+      pointer-events:auto;min-width:280px;max-width:720px;padding:28px 32px;border-radius:14px;background:rgba(18,18,20,0.75);backdrop-filter:blur(6px);color:white;text-align:center;box-shadow:0 10px 30px rgba(2,6,23,0.6);
+      transform-origin:center; animation:float 4s ease-in-out infinite;
+    }
+
+    @keyframes float{0%{transform:translateY(0)}50%{transform:translateY(-10px)}100%{transform:translateY(0)}}
+
+    h1{margin:0;font-size:28px;letter-spacing:0.6px}
+    p{margin:10px 0 0;color:rgba(255,255,255,0.85)}
+
+    /* pulsing dot under the marker */
+    .pulse{
+      width:110px;height:110px;border-radius:50%;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none;mix-blend-mode:screen;
+      background:radial-gradient(circle at center, rgba(0,150,255,0.35) 0%, rgba(0,150,255,0.15) 40%, rgba(0,150,255,0.02) 70%, transparent 100%);
+      animation:pulse 2.2s infinite;
+      filter:blur(6px);
+    }
+    @keyframes pulse{0%{transform:translate(-50%,-50%) scale(0.9);opacity:0.9}70%{transform:translate(-50%,-50%) scale(1.35);opacity:0.35}100%{transform:translate(-50%,-50%) scale(1.6);opacity:0}}
+
+    /* small style for a subtle footer */
+    .sub{font-size:13px;color:rgba(255,255,255,0.65);margin-top:12px}
+
+    /* small helper: top-left control to toggle overlay for testing */
+    .control{position:fixed;left:12px;top:12px;background:#fff;padding:8px 10px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.15);z-index:40}
+
+    /* map blur when overlay active (visual emphasis) */
+    .map-blur{filter:blur(2px) saturate(1.05);transform:scale(1.001);} 
+
+    /* Responsive tweaks */
+    @media (max-width:480px){.card{padding:18px;border-radius:12px}h1{font-size:20px}}
+  </style>
+</head>
+<body>
+
+  <!-- Map container -->
+  <div id="map" aria-hidden="false"></div>
+
+  <!-- Pulse visual centered at the exact center (you can position this with JS to a lat/lng) -->
+  <div class="pulse" style="z-index:5;pointer-events:none;" id="pulseDot"></div>
+
+  <!-- Overlay card -->
+  <div class="overlay" id="overlay">
+    <div class="card" role="status" aria-live="polite">
+      <h1 id="title">Launching Soon</h1>
+      <p id="subtitle">We're plotting something great at this location — check back later.</p>
+      <div class="sub">Subscribe to updates or refresh this page for ETA changes.</div>
+    </div>
+  </div>
+
+  <!-- a small debug control (optional) -->
+  <div class="control" style="display:none;" id="control">
+    <label><input type="checkbox" id="toggleOverlay" checked /> Overlay</label>
+  </div>
+
+  <script>
+    // ---------- CONFIG ----------
+    // If you want to use Google Maps JavaScript API put your API key below.
+    // Otherwise use the commented iframe fallback at bottom.
+    const CONFIG = {
+      apiKey: 'YOUR_GOOGLE_MAPS_API_KEY', // <-- replace with your key or leave empty to use iframe fallback below
+      center: { lat: 37.7749, lng: -122.4194 }, // default center (San Francisco). Change to your lat/lng
+      zoom: 14
+    };
+
+    // ---------- MAP INITIALIZATION ----------
+    function initMap() {
+      const map = new google.maps.Map(document.getElementById('map'), {
+        center: CONFIG.center,
+        zoom: CONFIG.zoom,
+        disableDefaultUI: true,
+        gestureHandling: 'cooperative',
+        fullscreenControl: false
+      });
+
+      // Drop a marker and make it bounce briefly
+      const marker = new google.maps.Marker({
+        position: CONFIG.center,
+        map,
+        title: 'Launching here',
+        animation: google.maps.Animation.DROP
+      });
+
+      // after drop, make it bounce a few times then stop
+      setTimeout(() => {
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+        setTimeout(() => marker.setAnimation(null), 2100);
+      }, 900);
+
+      // place the pulsing dot over the marker's position (convert lat/lng -> pixel)
+      google.maps.event.addListenerOnce(map, 'idle', () => placePulseAtLatLng(map, CONFIG.center));
+      google.maps.event.addListener(map, 'bounds_changed', () => placePulseAtLatLng(map, CONFIG.center));
+
+      // optional: clicking the overlay hides it for users who want to explore
+      const overlay = document.getElementById('overlay');
+      overlay.addEventListener('click', (e) => {
+        // clicking card does nothing — only clicking outside the card toggles
+        if (e.target === overlay) overlay.style.display = 'none';
+      });
+    }
+
+    function placePulseAtLatLng(map, latlng){
+      // convert lat/lng to container pixel and position the pulse element
+      const overlayProjection = map.getProjection && map.getProjection();
+      const point = latlng;
+      // Preferred method: use fromLatLngToPoint via MapCanvasProjection from an OverlayView
+      const ov = new google.maps.OverlayView();
+      ov.onAdd = function(){}; ov.draw = function(){
+        const proj = this.getProjection();
+        if (!proj) return;
+        const p = proj.fromLatLngToContainerPixel(new google.maps.LatLng(point.lat, point.lng));
+        const el = document.getElementById('pulseDot');
+        el.style.left = p.x + 'px';
+        el.style.top = p.y + 'px';
+        el.style.transform = 'translate(-50%,-50%)';
+      };
+      ov.setMap(map);
+    }
+
+    // If API key present, load the Google Maps script dynamically
+    if (CONFIG.apiKey && CONFIG.apiKey !== 'YOUR_GOOGLE_MAPS_API_KEY'){
+      const s = document.createElement('script');
+      s.src = `https://maps.googleapis.com/maps/api/js?key=${CONFIG.apiKey}&callback=initMap`;
+      s.defer = true; s.async = true; window.initMap = initMap;
+      document.head.appendChild(s);
+    } else {
+      // fallback: use an embeddable iframe map so the page still works without a key
+      console.warn('No API key provided — using iframe fallback. Replace CONFIG.apiKey with your Google Maps API key for a richer experience.');
+      const mapDiv = document.getElementById('map');
+      const iframe = document.createElement('iframe');
+      // center lat/lng into a Google Maps place URL (static embed)
+      const { lat, lng } = CONFIG.center;
+      iframe.src = `https://www.google.com/maps?q=${lat},${lng}&z=${CONFIG.zoom}&output=embed`;
+      iframe.style.border = '0'; iframe.style.width = '100%'; iframe.style.height = '100%'; iframe.loading = 'lazy';
+      mapDiv.appendChild(iframe);
+
+      // position pulse dot roughly in center (iframe cannot give exact pixel coords)
+      const pulse = document.getElementById('pulseDot');
+      pulse.style.left = '50%'; pulse.style.top = '50%';
+    }
+
+    // small UX: toggle overlay for testing (uncomment control if you want)
+    // document.getElementById('control').style.display = 'block';
+    // document.getElementById('toggleOverlay').addEventListener('change', (e)=>{document.getElementById('overlay').style.display = e.target.checked ? 'flex' : 'none'});
+
+  </script>
+
+  <!--
+    NOTES:
+    - Replace CONFIG.apiKey with a valid Google Maps JavaScript API key for full JS map behaviour.
+    - Change CONFIG.center to your project's latitude/longitude.
+    - If you prefer a static image instead of a live map, you can replace the #map contents with a static map image.
+    - You can easily change text: #title, #subtitle.
+  -->
+
+</body>
+</html>
